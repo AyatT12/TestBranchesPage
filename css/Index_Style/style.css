@@ -14,7 +14,6 @@ body {
 }
 
 
-
 /*=======================Navbar======================*/
 nav {
   background-color: rgba(255, 206, 148, 1);
@@ -97,11 +96,13 @@ nav {
   background-color: rgba(255, 255, 250, 1);
   border: 3px solid #FF9626;
   border-radius: 8px;
+  display: flex;
+  flex-direction: column;
 }
 
 .main-carousel-item {
   display: none;
-  height: 100%;
+  flex: 1;
 }
 
 .main-carousel-item.active {
@@ -210,8 +211,8 @@ nav {
 .btn-Pages {
   border-color: rgb(252, 212, 126);
   border: 1px solid #FF9626;
-   width: 100%;
-    white-space: nowrap;
+  width: 100%;
+  white-space: nowrap;
   transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
   border-radius: 8px;
   padding: 0.5rem 0.5rem;
@@ -319,29 +320,35 @@ footer {
   font-size: 1.2rem;
   letter-spacing: 0.32px;
 }
+
 .modal-header {
   color: rgb(0, 0, 0);
   border-radius: 0.5rem 0.5rem 0 0;
 }
-.modal-content{
+
+.modal-content {
   border-radius: 10px;
   border: 3px solid orange;
 }
+
 /*======================= Rate Modal ======================*/
-.rate-card{
-    box-shadow: 2px 2px 11px #ff962657;
-    border-radius: 10px;
-    padding: 4px 8px;
-    min-width: 75px;
-    cursor: pointer;
+.rate-card {
+  box-shadow: 2px 2px 11px #ff962657;
+  border-radius: 10px;
+  padding: 4px 8px;
+  min-width: 75px;
+  cursor: pointer;
 }
-.rate-card:hover{
-    box-shadow: inset 2px 2px 11px #ff962657;
+
+.rate-card:hover {
+  box-shadow: inset 2px 2px 11px #ff962657;
 }
-.rate-text{
+
+.rate-text {
   white-space: nowrap;
 }
-.rate-col-img{
+
+.rate-col-img {
   justify-content: center;
 }
 
@@ -382,7 +389,7 @@ footer {
   color: #D9D9D9;
 }
 
-.password-input{
+.password-input {
   border-radius: 8px;
   border: 2px solid #faa64d;
   resize: none;
@@ -390,21 +397,24 @@ footer {
   min-height: 48px !important;
 }
 
-.password-input:focus{
+.password-input:focus {
   box-shadow: none !important;
   border: 2px solid #facd9c !important;
 }
+
 .PassWord-invaildBox {
-    margin-top: .25rem;
-    min-height: 20px;
+  margin-top: .25rem;
+  min-height: 20px;
 }
+
 .Password-invalid-feedback {
-    color: red;
-    display: block;
-    font-size: 12px;
-    margin-top: 0rem;
-    text-align: end;
+  color: red;
+  display: block;
+  font-size: 12px;
+  margin-top: 0rem;
+  text-align: end;
 }
+
 /*======================= Feed Modal ======================*/
 /* تغذية الصندوق */
 .feed-acceptt-btn {
@@ -771,6 +781,7 @@ footer {
   width: 100%;
   direction: rtl;
 }
+
 .chart-card {
   background: white;
   border-radius: 20px;
@@ -789,14 +800,16 @@ footer {
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
   transform: translateY(-2px);
 }
-.chart-card .card-body{
+
+.chart-card .card-body {
   display: flex;
   align-items: center;
   justify-content: center;
 }
+
 .chart-card {
   height: 100%;
-  min-height: 250px; 
+  min-height: 250px;
 }
 
 #BalanceChart,
@@ -804,26 +817,42 @@ footer {
 #CarsChart {
   width: 100%;
   height: 100%;
-  letter-spacing:normal;
+  letter-spacing: normal;
 }
-#cardBody{
+
+#BalanceChart {
+  min-height: 350px;
+}
+
+#ContractsChart,
+#CarsChart {
+  min-height: 290px;
+}
+
+#cardBody {
   direction: rtl;
 }
-.Available_Car_Card{
+
+.Available_Car_Card {
   direction: ltr;
 }
-.car-icons{
+
+.car-icons {
   direction: ltr;
 }
-.chart-card{
+
+.chart-card {
   direction: rtl;
 }
+
 @media (min-width:1200px) {
-#nextBtn1,
-#prevBtn1 {
-  display: none;
+
+  #nextBtn1,
+  #prevBtn1 {
+    display: none;
+  }
 }
-}
+
 /* Chart Data */
 .card-menu-icon {
   position: absolute;
@@ -865,16 +894,18 @@ footer {
   margin: 0px 3px;
   font-size: 12px;
 }
-.car-item{
+
+.car-item {
   position: relative;
   flex-direction: column;
-  margin-bottom: 10px;
 }
+
 .chart-p,
 .card-info-popup {
   direction: rtl;
   text-align: right;
 }
+
 /*  */
 .apexcharts-xaxis text,
 .apexcharts-legend-text,
@@ -1538,6 +1569,7 @@ footer {
 .dropdown-value {
   font-weight: 600;
 }
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .chart-info-btn {
@@ -1551,97 +1583,160 @@ footer {
   transform: scale(0.95);
 }
 
-
-/* version 2 */
-@media (min-width:992px) {
-  .Page-Wrapper{
-  flex: 1;
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
+.btn-secondary1 p {
+  min-width: 75px;
 }
-.min-h-0{
-  min-height: 0;
-}
-/* === FIT SCREEN WITHOUT PAGE SCROLL === */
 
-html, body {
-  height: 100%;
-  overflow: hidden;
+/* version 2 for ipad specifications */
+
+.min-h-0 {
+  min-height: 0;
 }
 
 .Page-Wrapper {
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  overflow: hidden;
+  height: 100dvh;
 }
 
-/* Header: fixed height */
-.header {
-  flex-shrink: 0;
-}
+@media (min-width: 992px) {
 
-/* Footer: fixed height */
-footer {
-  flex-shrink: 0;
-}
+  .Page-Wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100dvh;
+    overflow: hidden;
+  }
 
-/* Wrapper fills remaining space */
-.wrapper {
-  flex: 1 1 0;
-  min-height: 0;         
-  overflow: hidden;
-  display: flex;
-  align-items: stretch;
-}
+  html,
+  body {
+    height: 100%;
+    overflow: hidden;
+  }
 
-/* Container and section fill full height */
-.wrapper .container-fluid,
-.wrapper .home-section,
-.wrapper .main-row {
-  height: 100%;
-}
+  .header {
+    flex-shrink: 0;
+  }
 
-/* === CARD fills its column === */
+  footer {
+    flex-shrink: 0;
+  }
 
-.col-lg-10.col-xl-9 .card .card-body {
-  height: 100%;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-}
+  .wrapper {
+    flex: 1 1 0;
+    min-height: 0;
+    overflow: hidden;
+    display: flex;
+    align-items: stretch;
+  }
 
-/* === CAROUSEL ITEMS: scrollable === */
-.main-carousel-item {
-  display: none;
-  height: 100%;
-  overflow-y: auto;      
-}
+  .wrapper .container-fluid,
+  .wrapper .home-section,
+  .wrapper .main-row {
+    height: 100%;
+  }
 
-.main-carousel-item.active {
-  display: block;
-}
+  .col-lg-10.col-xl-9 .card .card-body {
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
 
-/* === SIDE BUTTONS COLUMN: scrollable === */
-#button-on-mobile {
-  height: 100%;
-  overflow: auto;
-}
+  .main-carousel-item {
+    display: none;
+    overflow-y: auto;
+  }
 
-#button-on-mobile .card-body {
-  overflow-y: auto;      
-  padding-right: 4px;
-}
+  .main-carousel-item.active {
+    display: block;
+  }
+
+  #button-on-mobile {
+    height: 100%;
+    overflow: auto;
+  }
+
+  #button-on-mobile .card-body {
+    overflow-y: auto;
+    padding-right: 4px;
+  }
+
 
 }
 
 @media (max-width: 992px) {
- .col-lg-10.col-xl-9,
-.col-lg-10.col-xl-9 .card {
-  flex: 1;
-  min-height: 0;
-  overflow: hidden;
+
+  .col-lg-10.col-xl-9,
+  .col-lg-10.col-xl-9 .card {
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+  }
+
 }
 
+@media (min-width: 992px) and (max-width: 1399.9px) {
+
+  #ContractsChart,
+  #CarsChart {
+    min-height: auto;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1399.9px) {
+  #BalanceChart {
+    height: 100%;
+    min-height: 270px;
+  }
+
+  .btn-Pages img {
+    width: 35px;
+  }
+
+  .card .card-body {
+    padding: 5px;
+  }
+
+  .hidden-data {
+    display: none;
+  }
+
+  .car-card {
+    min-height: auto;
+  }
+
+  .contract-item {
+    padding: 2px 0px;
+  }
+
+  .car-title {
+    margin: 0;
+  }
+
+  .car-image {
+    height: 80px;
+  }
+
+  .reasons-list {
+    height: 40px;
+  }
+
+  .carFilter {
+    padding: .1rem .75rem .1rem 2.25rem;
+  }
+
+  .fa-angles-left,
+  .fa-angles-right {
+    font-size: 13px;
+  }
+
+  .pricing-row p {
+    margin-bottom: 0;
+  }
+
+  .more-btn {
+    font-size: .8rem;
+    padding: 5px;
+  }
 }

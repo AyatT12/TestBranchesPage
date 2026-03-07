@@ -10,7 +10,7 @@ var balanceOptions = {
   colors: ["rgba(54,162,235,1)", "rgba(255,99,132,1)"],
   chart: {
     type: "bar",
-    height: 400,
+    height: "100%",
     fontFamily: "'Cairo','Arial',sans-serif",
     toolbar: { show: false }
   },
@@ -83,7 +83,7 @@ var contractsOptions = {
   chart: {
     type: "pie",
     fontFamily: "'Cairo','Arial',sans-serif",
-    // height:"290"
+    height:"100%"
   },
   legend: {
     position: "bottom",
