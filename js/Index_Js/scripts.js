@@ -1,5 +1,5 @@
-// <!-- show main carouse items by bottons ( etc ,مؤجرة , احصائيات) -->
-// <!-- and control Pagination -->
+// // <!-- show main carouse items by bottons ( etc ,مؤجرة , احصائيات) -->
+// // <!-- and control Pagination -->
 const carouselsConfig = {
   1: { currentPage: 0, itemsPerPage: 3, filteredCars: [] },
   2: { currentPage: 0, itemsPerPage: 3, filteredCars: [] },
@@ -7,7 +7,7 @@ const carouselsConfig = {
   4: { currentPage: 0, itemsPerPage: 3, filteredCars: [] },
   5: { currentPage: 0, itemsPerPage: 3, filteredCars: [] },
 };
-// ===============added=================== //
+
 let previousWidth = window.innerWidth;
 
 function debounce(func, wait) {
@@ -21,13 +21,13 @@ function debounce(func, wait) {
     timeout = setTimeout(later, wait);
   };
 }
-// ================================== //
+
 document.addEventListener("DOMContentLoaded", function () {
   for (let i = 1; i <= 5; i++) {
     initCarousel(i);
   }
   showCarouselItem(1);
-  // ===============added=================== //
+
   window.addEventListener(
     "resize",
     debounce(() => {
@@ -40,7 +40,6 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     }, 50)
   );
-  // ================================= //
 });
 
 function initCarousel(carouselNumber) {
@@ -63,15 +62,13 @@ function initCarousel(carouselNumber) {
     .getElementById(`nextBtn${carouselNumber}`)
     ?.addEventListener("click", function () {
       if (
-        (config.currentPage + 1) * config.itemsPerPage <
-        config.filteredCars.length
+        (config.currentPage + 1) * config.itemsPerPage < config.filteredCars.length
       ) {
         config.currentPage++;
         showPage(carouselNumber);
       }
     });
 
-  // Set up event listener for filter
   document
     .getElementById(`carFilter${carouselNumber}`)
     ?.addEventListener("change", function (e) {
@@ -89,16 +86,68 @@ function initCarousel(carouselNumber) {
       showPage(carouselNumber);
     });
 
+  // =============== Touch Swipe Support =============== //
+  const carouselEl = document.getElementById(`carouselItem${carouselNumber}`);
+  if (carouselEl) {
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let isSwiping = false;
+
+    carouselEl.addEventListener("touchstart", function (e) {
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+      isSwiping = false;
+    }, { passive: true });
+
+    carouselEl.addEventListener("touchmove", function (e) {
+      const deltaX = Math.abs(e.touches[0].clientX - touchStartX);
+      const deltaY = Math.abs(e.touches[0].clientY - touchStartY);
+
+      if (deltaX > deltaY && deltaX > 10) {
+        isSwiping = true;
+      }
+    }, { passive: true });
+
+carouselEl.addEventListener("touchend", function (e) {
+      if (!isSwiping) return;
+
+      const touchEndX = e.changedTouches[0].clientX;
+      const diff = touchStartX - touchEndX;
+      const SWIPE_THRESHOLD = 50;
+      const Ar_Direction = document.documentElement.dir === "ltr" || 
+                    document.body.dir === "ltr" ||
+                    getComputedStyle(document.body).direction === "ltr";
+
+      const goNext = Ar_Direction ? diff < -SWIPE_THRESHOLD : diff > SWIPE_THRESHOLD;
+      const goPrev = Ar_Direction ? diff > SWIPE_THRESHOLD  : diff < -SWIPE_THRESHOLD;
+
+      if (goNext) {
+        if (
+          (config.currentPage + 1) * config.itemsPerPage < config.filteredCars.length
+        ) {
+          config.currentPage++;
+          showPage(carouselNumber);
+        }
+      } else if (goPrev) {
+        if (config.currentPage > 0) {
+          config.currentPage--;
+          showPage(carouselNumber);
+        }
+      }
+
+      isSwiping = false;
+    }, { passive: true });
+  }
+  // =================================================== //
+
   showPage(carouselNumber);
-  // ===============edited=================== //
   updateItemsPerPage(carouselNumber);
 }
-// ================================== //
+
 function updateItemsPerPage(carouselNumber) {
   const config = carouselsConfig[carouselNumber];
-  // ===============edited=================== //
   const previousItemsPerPage = config.itemsPerPage;
-  console.log(window.innerWidth);
+
   if (window.innerWidth <= 1199) {
     if (carouselNumber == 1) {
       config.itemsPerPage = 3;
@@ -108,11 +157,11 @@ function updateItemsPerPage(carouselNumber) {
   } else {
     config.itemsPerPage = 3;
   }
+
   if (previousItemsPerPage !== config.itemsPerPage) {
     config.currentPage = 0;
     showPage(carouselNumber);
   }
-  // ================================== //
 }
 
 function showPage(carouselNumber) {
@@ -161,7 +210,6 @@ function showCarouselItem(itemNumber, event) {
     showPage(itemNumber);
   }
 }
-
 // <!-- عرض البيانات التفصيلية للسيارات المتاحة -->
 // بيانات السيارات
 const carsData = {
