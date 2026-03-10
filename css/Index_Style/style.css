@@ -1350,6 +1350,10 @@ footer {
 
 .reasons-dropdown {
   direction: rtl;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .reasons-toggle {
@@ -1362,14 +1366,14 @@ footer {
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 5px;
 }
 
 .reasons-list {
   margin-top: 5px;
-  max-height: 0;
-  /* overflow: hidden; */
   transition: all 0.3s ease;
+  flex: 1;
+  min-height: 0px;
 }
 
 .reasons-list.show {
@@ -1393,7 +1397,6 @@ footer {
   display: flex;
   flex-wrap: wrap;
   gap: 5px;
-  /* height: 110px; */
   overflow-y: auto;
   align-content: flex-start;
 }
@@ -1721,11 +1724,6 @@ footer {
     margin: 0;
     font-size: 12px;
   }
-
-  /* .reasons-list {
-    height: 40px;
-  } */
-
   .carFilter {
     padding: .1rem .75rem .1rem 2.25rem;
   }

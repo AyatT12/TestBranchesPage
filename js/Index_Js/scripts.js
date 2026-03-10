@@ -1266,18 +1266,18 @@ function loadMaintenanceTab(carData) {
             `;
 }
 // <!-- Toggle Reasons List For Not Avaliables Cars -->
-function toggleReasons(button) {
-  const reasonsList = button.nextElementSibling;
-  const chevron = button.querySelector(".fa-chevron-down");
+// function toggleReasons(button) {
+//   const reasonsList = button.nextElementSibling;
+//   const chevron = button.querySelector(".fa-chevron-down");
 
-  reasonsList.classList.toggle("show");
+//   reasonsList.classList.toggle("show");
 
-  if (reasonsList.classList.contains("show")) {
-    chevron.style.transform = "rotate(180deg)";
-  } else {
-    chevron.style.transform = "rotate(0deg)";
-  }
-}
+//   if (reasonsList.classList.contains("show")) {
+//     chevron.style.transform = "rotate(180deg)";
+//   } else {
+//     chevron.style.transform = "rotate(0deg)";
+//   }
+// }
 // Close the warnning nav
 function closeWarning() {
   const warningSection = document.getElementById("warningSection");
