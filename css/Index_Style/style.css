@@ -790,7 +790,7 @@ footer {
   transition: all 0.4s ease;
   border: none;
   height: 100%;
-  min-height: 23rem;
+  min-height: 21.25rem;
   display: flex;
   /* gap: 5px; */
   justify-content: space-between;
@@ -926,7 +926,7 @@ footer {
   overflow: visible;
   transition: all 0.3s ease;
   display: flex;
-  gap: 5px;
+  /* gap: 5px; */
   align-items: center;
 
 }
@@ -1133,8 +1133,16 @@ footer {
   overflow: hidden;
   transition: all 0.4s ease;
   border: none;
-  height: 100%;
-  /* min-height: 23rem; */
+  /* height: 100%; */
+  min-height: 22rem;
+}
+
+#carsContainer1,
+#carsContainer2,
+#carsContainer3,
+#carsContainer4,
+#carsContainer5 {
+  align-items: center;
 }
 
 .card-body {
@@ -1614,7 +1622,7 @@ footer {
 
   html,
   body {
-    height: 100%;
+    height: 100dvh;
     overflow: hidden;
   }
 
@@ -1680,29 +1688,49 @@ footer {
 
 }
 
-@media (min-width: 992px) and (max-width: 1399.9px),(min-width: 992px) and (max-height: 800px) {
+
+
+@media (min-width: 768px) and (max-width: 1399.9px),
+(min-width: 768px) and (max-height: 900px) {
+  .car-image {
+    height: 80px;
+  }
+
+  #BalanceChart {
+    height: 100%;
+    min-height: 270px;
+  }
 
   #ContractsChart,
   #CarsChart {
     min-height: 230px;
   }
+
 }
-@media (min-width: 1399.9px) and (max-height: 700px){
- .hidden-data{
-  display: none;
- }
-}
-@media (min-width: 768px) and (max-width: 1399.9px){
-  .pagination_Container{
+@media (min-width: 1399.9px) and (max-height: 700px) {
+  .hidden-data {
     display: none;
   }
 }
-@media (min-width: 768px) and (max-width: 1399.9px),(min-width: 768px) and (max-height: 800px) {
+
+@media (min-width: 768px) and (max-width: 1399.9px) {
+  .pagination_Container {
+    display: none;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1399.9px),
+(min-width: 768px) and (max-height: 800px) {
   #BalanceChart {
     height: 100%;
     min-height: 270px;
   }
- 
+
+  #ContractsChart,
+  #CarsChart {
+    min-height: 230px;
+  }
+
   .btn-Pages img {
     width: 35px;
   }
@@ -1711,9 +1739,6 @@ footer {
     padding: 5px;
   }
 
-  .car-card {
-    min-height: auto;
-  }
 
   .contract-item {
     padding: 2px 0px;
@@ -1724,6 +1749,7 @@ footer {
     margin: 0;
     font-size: 12px;
   }
+
   .carFilter {
     padding: .1rem .75rem .1rem 2.25rem;
   }
@@ -1741,16 +1767,35 @@ footer {
     font-size: .8rem;
     padding: 5px;
   }
- 
-}
-@media (min-width: 768px) and (max-width: 1399.9px),(min-width: 768px) and (max-height: 730px) {
- .car-data-row ,.Serial-number {
-    display: none;
-  } 
 
 }
-@media (min-width: 768px) and (max-width: 1399.9px),(min-width: 768px) and (max-height: 900px) {
-   .car-image {
+
+@media(max-height:768px) {
+
+  #ContractsChart,
+  #CarsChart {
+    min-height: 230px;
+  }
+
+  .car-image {
     height: 80px;
+  }
+
+  .car-card {
+    height: 100%;
+    min-height: auto;
+  }
+
+  #carsContainer1,
+  #carsContainer2,
+  #carsContainer3,
+  #carsContainer4,
+  #carsContainer5 {
+    align-items: normal;
+  }
+
+  .car-data-row,
+  .Serial-number {
+    display: none;
   }
 }
