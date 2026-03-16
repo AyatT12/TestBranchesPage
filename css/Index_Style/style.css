@@ -928,7 +928,6 @@ footer {
   display: flex;
   /* gap: 5px; */
   align-items: center;
-
 }
 
 .car-card:hover {
@@ -1445,7 +1444,9 @@ footer {
   font-weight: 600;
   color: #2c3e50;
 }
-
+.contract-value {
+    margin-right: 8px;
+}
 .contract-item:last-child {
   border-bottom: none;
 }
