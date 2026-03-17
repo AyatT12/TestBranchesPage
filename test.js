@@ -1,65 +1,41 @@
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            // --- 1. Data and Constants ---
-            const dataLists = {
-                Cars: [{"text":"\u0647\u064A\u0648\u0646\u062F\u0627\u064A - \u0623\u0632\u064A\u0631\u0627 - \u00A0\u0633\u064A\u062F\u0627\u0646 \u0635\u063A\u064A\u0631\u0629 - 2019","value":"2019000002","count":5,"image":"/images/Bnan/Models/3100000002_20260304223714.png"},{"text":"\u0646\u064A\u0633\u0627\u0646 - \u0645\u0627\u0643\u0633\u064A\u0645\u0627 - \u0633\u064A\u062F\u0627\u0646 \u0643\u0628\u064A\u0631 - 2021","value":"2021000012","count":6,"image":"/images/Bnan/Models/3100000012_20260308145310.png"}]
-            };
-
-            const carNameInput = document.getElementById("CarName");
-            const startDateInput = document.getElementById("start-date");
-            const endDateInput = document.getElementById("End-date");
-            const carCodeField = document.getElementById("CrCasPriceCarBasicDistributionCode");
-
-            let isTrue = false;
-            const today = new Date();
-            const todayStr = today.toISOString().split("T")[0];
-
-            // --- 2. Date Field Initialization ---
-            startDateInput.disabled = true;
-            endDateInput.disabled = true;
-            startDateInput.max = todayStr;
-            endDateInput.min = todayStr;
-
-            function updateDateFields() {
-                if (isTrue) {
-                    startDateInput.disabled = false;
-                } else {
-                    startDateInput.disabled = true;
-                    endDateInput.disabled = true;
-                    startDateInput.value = "";
-                    endDateInput.value = "";
-                }
+ <script>
+        const cars = [
+            {
+                text: "هيونداي - أكسنت -  سيدان متوسطة - 2021 - س و ص 1870 - بني",
+                value: "1700000003",
+                image: "DefaultCar.png",
+                count: 15
+            },
+            {
+                text: "فورد - تورس -  سيدان متوسطة - 2021 - د ق هـ 4707 - رمادي",
+                value: "1700000004",
+                image: "DefaultCar.png",
+                count: 10
+            },
+            {
+                text: "كيا - تيلورايد -  عائلية كبيرة - 2021 - ص هـ ن 0420 - بنفسجي",
+                value: "1700000005",
+                image: "DefaultCar.png",
+                count: 5
+            },
+            {
+                text: "لكزس - اي اس -  فخمة متوسطة - 2020 - س و س 2877 - أبيض",
+                value: "1700000006",
+                image: "DefaultCar.png",
+                count: 8
             }
+        ];
 
-            function clearNumberInputs() {
-                $(".number-input.PriceInputs").val("");
-            }
+        const dataLists = { Cars: cars };
 
-            startDateInput.addEventListener("change", function () {
-                if (startDateInput.value) {
-                    endDateInput.disabled = false;
-                    let minByStartDate = new Date(startDateInput.value);
-                    minByStartDate.setDate(minByStartDate.getDate() + 1);
-                    let finalMinDate = (minByStartDate > today) ? minByStartDate : today;
-                    endDateInput.min = finalMinDate.toISOString().split("T")[0];
-
-                    if (endDateInput.value && new Date(endDateInput.value) < finalMinDate) {
-                        endDateInput.value = "";
-                    }
-                } else {
-                    endDateInput.disabled = true;
-                    endDateInput.value = "";
-                }
-            });
-
-            // --- 3. Enhanced Autocomplete Logic (Integrated) ---
+        $(document).ready(function () {
             function setupAutocomplete(inputId, listId, dataList, errorElementId, statusFlagName, validate) {
                 const $input = $("#" + inputId);
                 const $list = $("#" + listId);
-                const $hiddenCode = $("#" + inputId + "-code"); // For the hidden value
-                const $errorMessage = $("#" + errorElementId);
-                const $carCodeField = $("#CrCasPriceCarBasicDistributionCode"); // Original specific field
+                const $hiddenCode = $("#" + inputId + "-code");
+                const $error = $("#" + errorElementId);
 
+                // Arrow Initialization
                 const $arrow = $('<div class="autocomplete-arrow"></div>');
                 $('body').append($arrow);
 
@@ -70,141 +46,202 @@
                         $('body').hasClass('rtl') || $('html').hasClass('rtl')) return 'rtl';
                     return 'ltr';
                 }
+
                 const isRTL = detectDirection() === 'rtl';
 
                 function getMaxItemWidth(items) {
                     let maxWidth = 200;
                     const tempDiv = $('<div>').css({
-                        'position': 'absolute', 'visibility': 'hidden', 'white-space': 'nowrap',
-                        'font-size': '1rem', 'padding': '8px 12px'
+                        'position': 'absolute',
+                        'visibility': 'hidden',
+                        'white-space': 'nowrap',
+                        'font-size': '1rem',
+                        'font-family': 'inherit',
+                        'padding': '8px 12px'
                     }).appendTo('body');
+
                     items.forEach(item => {
                         tempDiv.text(item);
                         const width = tempDiv.outerWidth();
-                        if (width > maxWidth) maxWidth = width;
+                        if (width > maxWidth) {
+                            maxWidth = width;
+                        }
                     });
+
                     tempDiv.remove();
-                    return window.innerWidth < 768 ? Math.min(Math.max(maxWidth + 30, 150), 250) : maxWidth + 30;
+
+                    const isMobile = window.innerWidth < 768;
+                    let finalWidth = maxWidth + 30;
+
+                    if (isMobile) {
+                        finalWidth = Math.min(Math.max(finalWidth, 150), 250);
+                    } else {
+                        finalWidth = Math.max(finalWidth);
+                    }
+
+                    return finalWidth;
                 }
 
-               function updateAutocompletePosition() {
+                function updateAutocompletePosition() {
                     if ($list.is(":visible")) {
                         const inputRect = $input[0].getBoundingClientRect();
                         const viewportHeight = window.innerHeight;
+                        const viewportWidth = window.innerWidth;
+
                         const visibleItems = $list.find('div').toArray().map(div => div.textContent);
                         const calculatedWidth = getMaxItemWidth(visibleItems);
+                        $list.css('width', calculatedWidth + 'px');
 
-                        const spaceBelow = viewportHeight - inputRect.bottom - 10;
+                        let leftPosition;
+                        if (isRTL) {
+                            leftPosition = inputRect.left - (calculatedWidth - 230);
+                            if (leftPosition < 10) {
+                                leftPosition = 10;
+                            }
+                        } else {
+                            leftPosition = inputRect.right - (calculatedWidth - 230);
+                            if (leftPosition + calculatedWidth > viewportWidth - 10) {
+                                leftPosition = viewportWidth - calculatedWidth - 10;
+                            }
+                        }
+
+                        const spaceBelow = viewportHeight - inputRect.bottom;
+                        const spaceAbove = inputRect.top;
+                        const maxHeight = Math.min(spaceBelow);
 
                         $list.css({
-                            'position': 'fixed',
-                            'width': calculatedWidth + 'px',
-                            'top': (inputRect.bottom + 3) + 'px',
-                            'left': inputRect.left + 'px',
-                            'max-height': Math.min(spaceBelow, 250) + 'px', // ← أقصى 250px وبعدين scroll
-                            'overflow-y': 'auto' // ← الـ scroll
+                            'top': (inputRect.top + 3) + 'px',
+                            'left': leftPosition + 'px',
+                            'max-height': maxHeight + 'px',
+                            'height': 'auto'
                         });
+
                         updateArrowPosition();
                     }
                 }
 
-               function updateArrowPosition() {
+                function updateArrowPosition() {
                     const listRect = $list[0].getBoundingClientRect();
-    
-                    $arrow.css({
-                        'position': 'fixed',
-                        'z-index': '10001',
-                        'display': 'block',
-                        'top': (listRect.top + 10) + 'px',
-                        // RTL ← السهم على اليمين  |  LTR ← السهم على الشمال
-                        'left': isRTL ? (listRect.right + 2) + 'px' : (listRect.left - 10) + 'px',
-                        'border-right': isRTL ? 'none' : '8px solid #d3d3d3',
-                        'border-left': isRTL ? '8px solid #d3d3d3' : 'none',
-                        'border-bottom': '8px solid transparent',
-                        'border-top': '8px solid transparent'
-                    });
+                    let arrowStyle = {
+                        'position': 'fixed', 'z-index': '10001', 'display': 'block',
+                        'pointer-events': 'none', 'top': (listRect.top + 10) + 'px'
+                    };
+
+                    if (isRTL) {
+                        arrowStyle['left'] = (listRect.right + 2) + 'px';
+                        arrowStyle['border-left'] = '8px solid #d3d3d3';
+                        arrowStyle['border-right'] = 'none';
+                    } else {
+                        arrowStyle['left'] = (listRect.left - 10) + 'px';
+                        arrowStyle['border-left'] = 'none';
+                        arrowStyle['border-right'] = '8px solid #d3d3d3';
+                    }
+                    arrowStyle['border-bottom'] = '8px solid transparent';
+                    arrowStyle['border-top'] = '8px solid transparent';
+
+                    $arrow.css(arrowStyle);
                 }
 
+                // Input Logic with match check
                 $input.on("input", function () {
                     const value = this.value.trim().toLowerCase();
                     $list.empty();
 
-                    // Original trigger: clear fields on typing
-                    clearNumberInputs();
-                    isTrue = false;
-                    updateDateFields();
+                    if (validate) {
+                        $hiddenCode.val('');
+                        $error.text('');
+                    }
+
+                    if (value === "") {
+                        dataList.forEach(item => {
+                            $list.append(`<div data-value="${item.value}" data-image="${item.image}" data-count="${item.count}">${item.text}</div>`);
+                        });
+
+                        $list.show();
+                        setTimeout(() => {
+                            updateAutocompletePosition();
+                            $list.find('div').first().addClass('active');
+                        }, 10);
+
+                        return;
+                    }
 
                     let matchesFound = false;
+
                     dataList.forEach(item => {
-                        if (item.text.toLowerCase().includes(value) || value === "") {
-                            $list.append(`<div data-name="${item.text}" data-value="${item.value}" data-image="${item.image}" data-count="${item.count}">${item.text}</div>`);
+                        if (item.text.trim().toLowerCase().includes(value)) {
+                            $list.append(`<div data-value="${item.value}" data-image="${item.image}" data-count="${item.count}">${item.text}</div>`);
                             matchesFound = true;
                         }
                     });
 
                     if (matchesFound) {
                         $list.show();
-                        setTimeout(updateAutocompletePosition, 10);
+                        setTimeout(() => {
+                            updateAutocompletePosition();
+                            $list.find('div').first().addClass('active');
+                        }, 10);
                     } else {
                         $list.hide();
                         $arrow.hide();
                     }
                 });
 
-                $(document).on("click", "#" + listId + " div", function () {
-                    const selectedText = $(this).data("name");
+                // عند اختيار سيارة
+                $list.on("click", "div", function () {
+                    const text = $(this).text();
+                    const val = $(this).data("value");
                     const carImage = $(this).data("image");
                     const carCount = $(this).data("count");
-                    const carCode = $(this).data("value");
 
-                    $input.val(selectedText);
-                    $carCodeField.val(carCode);
-                    $list.hide();
-                    $arrow.hide();
+                    $input.val(text);
+                    $hiddenCode.val(val);
 
-                    // Image Preview Logic
-                    const imgPath = carImage.includes("/") ? carImage : `../../../images/Demo/${carImage}`;
+                    // عرض الصورة
                     if ($('.carImagePreview img').length) {
-                        $('.carImagePreview img').attr('src', imgPath);
-                    } else {
-                        $('.carImagePreview').append($('<img>').attr('src', imgPath));
+                        $('.carImagePreview img').attr('src', `../../../images/Demo/${carImage}`);
+                    }
+                    else {
+                        const img = $('<img>').attr('src', `../../../images/Demo/${carImage}`);
+                        $('.carImagePreview').append(img);
                     }
 
+                    // عرض العدد
                     $(".CarsCount").text(carCount);
-                    isTrue = true;
-                    $errorMessage.text("");
-                    $input.removeClass("is-invalid");
-                    updateDateFields();
+
+                    if (validate) {
+                        $error.text('');
+                        window[statusFlagName] = true;
+                    }
+
+                    $list.hide();
+                    $arrow.hide();
+                    $input.focus();
                 });
 
-                $input.on("blur", function () {
-                    setTimeout(() => {
-                        const inputValue = $input.val().trim();
-                        const carExists = dataList.some(car => car.text === inputValue);
-                        if (!carExists && inputValue !== "") {
-                            $errorMessage.text("الحقل مطلوب");
-                            $input.addClass("is-invalid");
-                            $carCodeField.val("");
-                            $(".carImagePreview img").attr("src", "");
-                            $(".CarsCount").text("");
-                            isTrue = false;
-                        } else if (carExists) {
-                            isTrue = true;
-                            $errorMessage.text("");
-                            $input.removeClass("is-invalid");
-                        }
-                        updateDateFields();
-                    }, 250);
-                });
+                // Blur Validation
+                if (validate) {
+                    $input.on("blur", function () {
+                        setTimeout(() => {
+                            const currentVal = $(this).val();
+                            const match = dataList.find(i => i.text === currentVal);
+                            if (!match && currentVal !== "") {
+                                $error.text("This Field Is Required");
+                                window[statusFlagName] = false;
+                                $hiddenCode.val('');
+                            }
+                        }, 200);
+                    });
+                }
 
-                $(document).click(function (e) {
-                    if (!$(e.target).closest($list).length && !$(e.target).closest($input).length) {
+                $(document).on("click", function (e) {
+                    if (!$(e.target).closest($input).length && !$(e.target).closest($list).length) {
                         $list.hide();
                         $arrow.hide();
                     }
                 });
             }
 
-            setupAutocomplete("CarName", "autocomplete-Cars", dataLists.Cars, "CrCasPriceCarBasicDistributionCode-Error");
+            setupAutocomplete("CarName", "autocomplete-Cars", dataLists.Cars);
         });
     </script>
