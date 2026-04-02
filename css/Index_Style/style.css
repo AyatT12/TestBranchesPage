@@ -826,7 +826,7 @@ footer {
 
 #ContractsChart,
 #CarsChart {
-  min-height: 300px;
+  min-height: 300px !important;
 }
 
 #cardBody {
@@ -1705,10 +1705,13 @@ footer {
     min-height: 270px;
   }
 
-  #ContractsChart,
-  #CarsChart {
-    min-height: 230px;
-  }
+    #CarsChart {
+      min-height: 230px !important;
+    }
+  
+    #ContractsChart {
+      min-height: 200px !important;
+    }
 
 }
 @media (min-width: 1399.9px) and (max-height: 700px) {
@@ -1732,7 +1735,7 @@ footer {
 
   #ContractsChart,
   #CarsChart {
-    min-height: 230px;
+    min-height: 230px !important;
   }
 
   .btn-Pages img {
