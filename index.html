@@ -212,9 +212,8 @@
                                                             </div>
                                                             <div class="card-body p-0">
                                                                 <div class="chart-container">
-                                                                    <div id="ContractsChart"
-                                                                        style="display: block; width: 100%; height: 100%;">
-                                                                    </div>
+                                                                    <div id="ContractsChart" style="display: block; width: 100%; height: 80%;"> </div>
+                                                                    <div id="ContractsChartLegend" style="text-align:center;"></div>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -2473,6 +2472,279 @@
     <script src="js/Index_Js/scripts.js"></script>
     <script src="js/Index_Js/charts.js"></script>
     <!-- Password input eye  -->
+     <script>
+    const carouselsConfig = {
+        1: { currentPage: 0, itemsPerPage: 3, filteredCars: [], swipeLock: false, lastSwipeTime: 0 },
+        2: { currentPage: 0, itemsPerPage: 3, filteredCars: [], swipeLock: false, lastSwipeTime: 0 },
+        3: { currentPage: 0, itemsPerPage: 3, filteredCars: [], swipeLock: false, lastSwipeTime: 0 },
+        4: { currentPage: 0, itemsPerPage: 3, filteredCars: [], swipeLock: false, lastSwipeTime: 0 },
+        5: { currentPage: 0, itemsPerPage: 3, filteredCars: [], swipeLock: false, lastSwipeTime: 0 }
+    };
+
+    let previousWidth = window.innerWidth;
+    let activeCarouselNumber = 1; 
+
+    function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        for (let i = 1; i <= 5; i++) {
+            initCarousel(i);
+        }
+        showCarouselItem(1);
+
+        window.addEventListener(
+            "resize",
+            debounce(() => {
+                const currentWidth = window.innerWidth;
+                if (currentWidth !== previousWidth) {
+                    previousWidth = currentWidth;
+                    for (let i = 1; i <= 5; i++) {
+                        updateItemsPerPage(i);
+                    }
+                }
+            }, 50)
+        );
+    });
+
+    function initCarousel(carouselNumber) {
+        const carItems = document.querySelectorAll(
+            `#carouselItem${carouselNumber} .car-item`
+        );
+        const config = carouselsConfig[carouselNumber];
+        config.filteredCars = Array.from(carItems);
+        
+        let startX = 0;
+        let startY = 0;
+        let isSwiping = false;
+        let isMouseDown = false;
+        let touchIdentifier = null;
+        const SWIPE_COOLDOWN = 300;
+
+        function En_Direction() {
+            return document.documentElement.dir === "rtl" ||
+                document.body.dir === "rtl" ||
+                getComputedStyle(document.body).direction === "rtl";
+        }
+
+        function handleSwipeEnd(endX) {
+            if (config.swipeLock || !isSwiping) return;
+            
+            const diff = startX - endX;
+            const SWIPE_THRESHOLD = 50;
+            const goNext = En_Direction() ? diff > SWIPE_THRESHOLD : diff < -SWIPE_THRESHOLD;
+            const goPrev = En_Direction() ? diff < -SWIPE_THRESHOLD : diff > SWIPE_THRESHOLD;
+
+            let pageChanged = false;
+
+            if (goNext) {
+                if ((config.currentPage + 1) * config.itemsPerPage < config.filteredCars.length) {
+                    config.currentPage++;
+                    pageChanged = true;
+                }
+            } else if (goPrev) {
+                if (config.currentPage > 0) {
+                    config.currentPage--;
+                    pageChanged = true;
+                }
+            }
+            
+            if (pageChanged) {
+                config.swipeLock = true;
+                config.lastSwipeTime = Date.now();
+                showPage(carouselNumber);
+                
+                setTimeout(() => {
+                    config.swipeLock = false;
+                }, SWIPE_COOLDOWN);
+            }
+            
+            isSwiping = false;
+            touchIdentifier = null;
+        }
+
+        const carouselEl = document.getElementById(`carouselItem${carouselNumber}`);
+        if (carouselEl) {
+
+            carouselEl.addEventListener("touchstart", function (e) {
+
+                if (activeCarouselNumber !== carouselNumber) return;
+                if (config.swipeLock) return;
+                
+                startX = e.touches[0].clientX;
+                startY = e.touches[0].clientY;
+                touchIdentifier = e.touches[0].identifier;
+                isSwiping = false;
+            }, { passive: true });
+
+            carouselEl.addEventListener("touchmove", function (e) {
+                if (activeCarouselNumber !== carouselNumber) return;
+                if (config.swipeLock) return;
+                
+                const deltaX = Math.abs(e.touches[0].clientX - startX);
+                const deltaY = Math.abs(e.touches[0].clientY - startY);
+                if (deltaX > deltaY && deltaX > 10) {
+                    isSwiping = true;
+                }
+            }, { passive: true });
+
+            carouselEl.addEventListener("touchend", function (e) {
+                if (activeCarouselNumber !== carouselNumber) return;
+                if (touchIdentifier === e.changedTouches[0].identifier) {
+                    handleSwipeEnd(e.changedTouches[0].clientX);
+                }
+            }, { passive: true });
+
+            carouselEl.addEventListener("mousedown", function (e) {
+                if (activeCarouselNumber !== carouselNumber) return;
+                if (config.swipeLock) return;
+                
+                startX = e.clientX;
+                startY = e.clientY;
+                isMouseDown = true;
+                isSwiping = false;
+            });
+
+            carouselEl.addEventListener("mousemove", function (e) {
+                if (activeCarouselNumber !== carouselNumber) return;
+                if (!isMouseDown || config.swipeLock) return;
+                
+                const deltaX = Math.abs(e.clientX - startX);
+                const deltaY = Math.abs(e.clientY - startY);
+                if (deltaX > deltaY && deltaX > 10) {
+                    isSwiping = true;
+                }
+            });
+
+            carouselEl.addEventListener("mouseup", function (e) {
+                if (activeCarouselNumber !== carouselNumber) return;
+                if (!isMouseDown) return;
+                isMouseDown = false;
+                handleSwipeEnd(e.clientX);
+            });
+
+            carouselEl.addEventListener("mouseleave", function (e) {
+                if (activeCarouselNumber !== carouselNumber) return;
+                if (!isMouseDown) return;
+                isMouseDown = false;
+                handleSwipeEnd(e.clientX);
+            });
+        }
+
+        document.getElementById(`prevBtn${carouselNumber}`)
+            ?.addEventListener("click", function () {
+                if (activeCarouselNumber !== carouselNumber) return;
+                if (config.currentPage > 0) {
+                    config.currentPage--;
+                    showPage(carouselNumber);
+                }
+            });
+
+        document.getElementById(`nextBtn${carouselNumber}`)
+            ?.addEventListener("click", function () {
+                if (activeCarouselNumber !== carouselNumber) return;
+                if ((config.currentPage + 1) * config.itemsPerPage < config.filteredCars.length) {
+                    config.currentPage++;
+                    showPage(carouselNumber);
+                }
+            });
+
+        document.getElementById(`carFilter${carouselNumber}`)
+            ?.addEventListener("change", function (e) {
+                if (activeCarouselNumber !== carouselNumber) return;
+                const selectedType = e.target.value;
+                if (selectedType === "all") {
+                    config.filteredCars = Array.from(carItems);
+                } else {
+                    config.filteredCars = Array.from(carItems).filter(
+                        (car) => car.getAttribute("data-type") === selectedType
+                    );
+                }
+                config.currentPage = 0;
+                showPage(carouselNumber);
+            });
+
+        showPage(carouselNumber);
+        updateItemsPerPage(carouselNumber);
+    }
+
+    function updateItemsPerPage(carouselNumber) {
+        const config = carouselsConfig[carouselNumber];
+        const previousItemsPerPage = config.itemsPerPage;
+
+        if (window.innerWidth <= 1199) {
+            if (carouselNumber == 1) {
+                config.itemsPerPage = 3;
+            } else {
+                config.itemsPerPage = 2;
+            }
+        } else {
+            config.itemsPerPage = 3;
+        }
+
+        if (previousItemsPerPage !== config.itemsPerPage) {
+            config.currentPage = 0;
+            showPage(carouselNumber);
+        }
+    }
+
+    function showPage(carouselNumber) {
+        const config = carouselsConfig[carouselNumber];
+        const carItems = document.querySelectorAll(
+            `#carouselItem${carouselNumber} .car-item`
+        );
+        const startIndex = config.currentPage * config.itemsPerPage;
+        const endIndex = startIndex + config.itemsPerPage;
+
+        carItems.forEach(car => {
+            car.style.display = 'none';
+        });
+
+        config.filteredCars.forEach((car, index) => {
+            if (index >= startIndex && index < endIndex) {
+                car.style.display = 'block';
+            }
+        });
+
+        if (document.getElementById(`prevBtn${carouselNumber}`)) {
+            document.getElementById(`prevBtn${carouselNumber}`).disabled = config.currentPage === 0;
+            document.getElementById(`nextBtn${carouselNumber}`).disabled = endIndex >= config.filteredCars.length;
+        }
+    }
+
+    function showCarouselItem(itemNumber, event) {
+
+        activeCarouselNumber = itemNumber;
+        
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.classList.remove('active1');
+        });
+
+        if (event && event.currentTarget) {
+            event.currentTarget.classList.add('active1');
+        }
+
+        const carouselItems = document.getElementsByClassName('main-carousel-item');
+        for (let i = 0; i < carouselItems.length; i++) {
+            carouselItems[i].classList.remove('active');
+        }
+
+        const carouselItem = document.getElementById(`carouselItem${itemNumber}`);
+        if (carouselItem) {
+            carouselItem.classList.add('active');
+            showPage(itemNumber);
+        }
+    }
+</script>
     <script>
         const inputs = document.querySelectorAll('#CurrentPasword , #NewPassword , #Confirm-password');
         const togglePasswords = document.querySelectorAll('.toggle-password');
