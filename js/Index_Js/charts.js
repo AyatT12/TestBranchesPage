@@ -93,8 +93,8 @@ function buildCustomLegend() {
       transition: opacity 0.3s;
     `;
     item.innerHTML = `
-      <span style="width:10px;height:10px;border-radius:50%;background:${allColors[i]};display:inline-block;flex-shrink:0"></span>
       <span>${label}</span>
+      <span style="width:10px;height:10px;border-radius:50%;background:${allColors[i]};display:inline-block;flex-shrink:0"></span>
     `;
     if (allSeries[i] > 0) {
       item.addEventListener("click", function() {
